@@ -1,0 +1,11 @@
+spec_version: "0.1.0"
+name: my-project-cron
+description: "Minimal gitcron example"
+
+schedules:
+  - name: nightly-task
+    description: "Run a task every night at 2 AM"
+    cron: "0 2 * * *"
+    command: "echo 'Hello from gitcron'"
+    branch:
+      strategy: none

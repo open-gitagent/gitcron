@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gitcron.dev/schemas/cron-yaml.schema.json",
+  "title": "gitcron cron.yaml",
+  "type": "object",
+  "required": ["spec_version", "name"],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "minLength": 2
+    },
+    "description": { "type": "string" },
+    "schedules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/schedule" }
+    },
+    "tasks": { "$ref": "#/$defs/tasksConfig" },
+    "reminders": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reminder" }
+    },
+    "settings": { "$ref": "#/$defs/settings" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "schedule": {
+      "type": "object",
+      "required": ["name", "cron"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+        },
+        "description": { "type": "string" },
+        "cron": { "type": "string" },
+        "enabled": { "type": "boolean", "default": true },
+        "category": { "type": "string" },
+        "agent": { "type": "string" },
+        "adapter": {
+          "type": "string",
+          "enum": ["claude", "openai", "gitclaw", "system-prompt"]
+        },
+        "prompt": { "type": "string" },
+        "command": { "type": "string" },
+        "agent_source": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["local", "repo"] },
+            "path": { "type": "string" },
+            "repo": { "type": "string" }
+          },
+          "required": ["type"]
+        },
+        "branch": {
+          "type": "object",
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["pr", "create", "commit", "none"]
+            },
+            "base": { "type": "string" },
+            "name_template": { "type": "string" },
+            "pr_title": { "type": "string" },
+            "pr_labels": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["strategy"]
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "secrets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "timeout": { "type": "number", "minimum": 1 },
+        "retry": {
+          "type": "object",
+          "properties": {
+            "max_attempts": { "type": "number", "minimum": 1 }
+          }
+        },
+        "notify": {
+          "type": "object",
+          "properties": {
+            "on_failure": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/notifyAction" }
+            },
+            "on_success": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/notifyAction" }
+            }
+          }
+        }
+      },
+      "oneOf": [
+        { "required": ["agent"] },
+        { "required": ["command"] }
+      ],
+      "additionalProperties": false
+    },
+    "notifyAction": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["issue", "slack", "email"] },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "labels": { "type": "array", "items": { "type": "string" } },
+        "assignees": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tasksConfig": {
+      "type": "object",
+      "required": ["directory", "states", "transitions"],
+      "properties": {
+        "directory": { "type": "string" },
+        "states": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "transitions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "reminder": {
+      "type": "object",
+      "required": ["name", "type", "action"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+        },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["recurring", "one-shot"] },
+        "cron": { "type": "string" },
+        "at": { "type": "string", "format": "date-time" },
+        "enabled": { "type": "boolean", "default": true },
+        "action": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string", "enum": ["issue", "slack", "email"] },
+            "title": { "type": "string" },
+            "body": { "type": "string" },
+            "labels": { "type": "array", "items": { "type": "string" } },
+            "assignees": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      },
+      "if": { "properties": { "type": { "const": "recurring" } } },
+      "then": { "required": ["cron"] },
+      "else": { "required": ["at"] },
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "workflow_dir": { "type": "string" },
+        "workflow_prefix": { "type": "string" },
+        "commit_author": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string" }
+          },
+          "required": ["name", "email"]
+        }
+      }
+    }
+  }
+}

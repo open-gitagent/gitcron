@@ -1,0 +1,54 @@
+export const STANDARD_CRON_YAML = `spec_version: "0.1.0"
+name: my-project-cron
+description: "Scheduled tasks for my project"
+
+schedules:
+  - name: nightly-code-review
+    description: "Run code review agent daily"
+    cron: "0 2 * * *"
+    enabled: true
+    category: maintenance
+    agent: code-reviewer
+    adapter: claude
+    prompt: "Review all open PRs"
+    branch:
+      strategy: pr
+      base: main
+      name_template: "gitcron/{{name}}/{{date}}"
+      pr_title: "gitcron: {{name}} — {{date}}"
+      pr_labels: [automated, gitcron]
+    timeout: 300
+    notify:
+      on_failure:
+        - type: issue
+          title: "gitcron: {{name}} failed"
+          labels: [bug, gitcron]
+
+tasks:
+  directory: ".gitcron/tasks"
+  states: [pending, in_progress, review, done, cancelled]
+  transitions:
+    pending: [in_progress, cancelled]
+    in_progress: [review, done, cancelled]
+    review: [in_progress, done]
+    done: []
+    cancelled: []
+
+reminders:
+  - name: weekly-status
+    description: "Weekly status reminder"
+    type: recurring
+    cron: "0 9 * * 1"
+    action:
+      type: issue
+      title: "Weekly Status Update"
+      body: "Time for the weekly status update."
+      labels: [reminder]
+
+settings:
+  workflow_dir: ".github/workflows"
+  workflow_prefix: "gitcron-"
+  commit_author:
+    name: "gitcron[bot]"
+    email: "gitcron[bot]@users.noreply.github.com"
+`;
