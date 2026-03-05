@@ -1,0 +1,50 @@
+name: gitcron-schedule
+description: Create, list, or modify scheduled jobs in cron.yaml. Use this to schedule recurring tasks like code reviews, linting, dependency updates, or any agent/command to run on a cron schedule.
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    action:
+      type: string
+      enum: [create, list, enable, disable]
+      description: "Action to perform: create a new schedule, list existing schedules, enable/disable a schedule"
+    name:
+      type: string
+      description: "Schedule name in kebab-case (e.g., nightly-review). Required for create/enable/disable."
+    cron:
+      type: string
+      description: "Cron expression (e.g., '0 2 * * *' for daily at 2 AM). Required for create."
+    type:
+      type: string
+      enum: [agent, command]
+      description: "Whether this runs a gitagent/gitclaw agent or a shell command. Required for create."
+    agent:
+      type: string
+      description: "Agent name (when type=agent)"
+    adapter:
+      type: string
+      enum: [claude, openai, gitclaw, system-prompt]
+      description: "Adapter for agent execution (when type=agent)"
+    command:
+      type: string
+      description: "Shell command to run (when type=command)"
+    prompt:
+      type: string
+      description: "Prompt for the agent (when type=agent)"
+    strategy:
+      type: string
+      enum: [pr, create, commit, none]
+      description: "Branch strategy: pr (create PR), create (push branch), commit (push to base), none"
+    description:
+      type: string
+      description: "Human-readable description of the schedule"
+  required: [action]
+implementation:
+  type: script
+  path: scripts/gitcron-schedule.sh
+  runtime: bash
+  timeout: 30
+annotations:
+  requires_confirmation: false
+  read_only: false
+  cost: none

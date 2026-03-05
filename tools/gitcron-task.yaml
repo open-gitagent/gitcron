@@ -1,0 +1,39 @@
+name: gitcron-task
+description: Create, list, update, or show git-native tasks tracked in .gitcron/tasks/. Each task mutation creates a git commit. Use this for project task management.
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    action:
+      type: string
+      enum: [create, list, update, show]
+      description: "Action: create a task, list tasks, update task state, show task details"
+    title:
+      type: string
+      description: "Task title (required for create)"
+    id:
+      type: string
+      description: "Task ID like TASK-001 (required for update/show)"
+    state:
+      type: string
+      description: "New state for update (e.g., pending, in_progress, review, done, cancelled)"
+    priority:
+      type: string
+      enum: [low, medium, high]
+      description: "Task priority (for create)"
+    assignee:
+      type: string
+      description: "Assignee name (for create/update)"
+    filter_state:
+      type: string
+      description: "Filter tasks by state (for list)"
+  required: [action]
+implementation:
+  type: script
+  path: scripts/gitcron-task.sh
+  runtime: bash
+  timeout: 30
+annotations:
+  requires_confirmation: false
+  read_only: false
+  cost: none

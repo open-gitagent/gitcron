@@ -1,0 +1,23 @@
+name: gitcron-status
+description: Get a full overview of gitcron configuration — active schedules, task counts by state, reminders, and workflow file status. Also validates the configuration.
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    action:
+      type: string
+      enum: [status, validate, generate]
+      description: "status: overview, validate: check cron.yaml, generate: regenerate workflow files"
+    dry_run:
+      type: boolean
+      description: "For generate action: preview without writing files"
+  required: [action]
+implementation:
+  type: script
+  path: scripts/gitcron-status.sh
+  runtime: bash
+  timeout: 30
+annotations:
+  requires_confirmation: false
+  read_only: true
+  cost: none

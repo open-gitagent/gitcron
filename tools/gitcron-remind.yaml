@@ -1,0 +1,32 @@
+name: gitcron-remind
+description: Create, list, fire, pause, or resume reminders. Reminders create GitHub issues on a schedule or at a specific time.
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    action:
+      type: string
+      enum: [create, list, fire, pause, resume]
+      description: "Action: create a reminder, list reminders, manually fire one, pause/resume"
+    name:
+      type: string
+      description: "Reminder name in kebab-case (required for create/fire/pause/resume)"
+    cron:
+      type: string
+      description: "Cron expression for recurring reminders (required for create)"
+    title:
+      type: string
+      description: "Issue title (for create)"
+    body:
+      type: string
+      description: "Issue body (for create)"
+  required: [action]
+implementation:
+  type: script
+  path: scripts/gitcron-remind.sh
+  runtime: bash
+  timeout: 30
+annotations:
+  requires_confirmation: false
+  read_only: false
+  cost: none
