@@ -1,6 +1,6 @@
 {
   "name": "gitcron",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cron for AI agents — git-native scheduling, tasks, and reminders compiled to GitHub Actions",
   "type": "module",
   "license": "MIT",
