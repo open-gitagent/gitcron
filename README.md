@@ -1,8 +1,51 @@
-# gitcron
+<p align="center">
+  <img src="./mascot.png" alt="gitcron mascot" width="200" />
+</p>
 
-Git-native scheduling, tasks, and reminders — `cron.yaml` to GitHub Actions.
+<p align="center">
+  <img src="https://img.shields.io/npm/v/gitcron?style=flat-square&color=blue" alt="npm version" />
+  <img src="https://img.shields.io/badge/node-%3E%3D20-brightgreen?style=flat-square" alt="node version" />
+  <img src="https://img.shields.io/github/license/open-gitagent/gitcron?style=flat-square" alt="license" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript&logoColor=white" alt="typescript" />
+</p>
 
-**gitcron** is a compiler that reads `cron.yaml` and generates `.github/workflows/*.yml` files. No custom runtime needed — GitHub Actions IS the scheduler.
+<h1 align="center">Gitcron</h1>
+
+<p align="center">
+  <strong>Cron for AI agents.</strong><br/>
+  Schedule any AI agent — gitclaw, gitagent, Claude Code SDK, OpenAI, or your own — using <code>cron.yaml</code> compiled to GitHub Actions.<br/>
+  No custom runtime. No infra. Just git.
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#cronyaml">cron.yaml</a> &bull;
+  <a href="#cli-commands">CLI Commands</a> &bull;
+  <a href="#compatible-agents">Compatible Agents</a> &bull;
+  <a href="#branch-strategies">Branch Strategies</a> &bull;
+  <a href="#adapters">Adapters</a>
+</p>
+
+---
+
+## Why Gitcron?
+
+**AI agents need cron.** Agents review PRs, fix lint, run audits, validate models, and track compliance — but there's no standard way to schedule them. Gitcron is **cron for AI agents**:
+
+1. Define schedules, tasks, and reminders in `cron.yaml`
+2. Run `gitcron generate` to compile into GitHub Actions workflows
+3. Commit and push — GitHub runs your agents automatically
+
+Works with **any agent framework** via gitagent adapters:
+
+| Agent / Framework | Adapter | How it works |
+|---|---|---|
+| **gitclaw** | `gitclaw` | Full runtime with tools, hooks, audit, compliance |
+| **gitagent** | `claude` / `openai` | Framework-agnostic agent standard |
+| **Claude Code SDK** | `claude` | Claude-powered code agents |
+| **OpenAI** | `openai` | GPT-powered agents |
+| **Any LLM** | `system-prompt` | Generic system prompt export |
+| **Shell commands** | `command` | Any CLI tool, script, or binary |
 
 ## Install
 
@@ -25,12 +68,6 @@ gitcron generate
 # Preview without writing
 gitcron generate --dry-run
 ```
-
-## How It Works
-
-1. Define schedules, tasks, and reminders in `cron.yaml`
-2. Run `gitcron generate` to compile into GitHub Actions workflows
-3. Commit and push — GitHub runs your schedules automatically
 
 ## cron.yaml
 
@@ -145,6 +182,18 @@ gitcron remind pause weekly-sync
 gitcron remind resume weekly-sync
 ```
 
+## Compatible Agents
+
+Gitcron is the scheduling layer for the entire AI agent ecosystem. Any agent that can run as a CLI command can be scheduled:
+
+- **gitclaw** — Enterprise agent runtime with built-in tools, hooks, audit logging, and compliance. Best for regulated environments.
+- **gitagent** — Open git-native agent standard. Adapters for Claude, OpenAI, and any LLM.
+- **Claude Code SDK** — Build and schedule Claude-powered agents via the `claude` adapter.
+- **OpenAI agents** — Schedule GPT-powered agents via the `openai` adapter.
+- **Custom agents** — Use `command` to schedule any script, binary, or CLI tool.
+
+Gitcron ships with **skills** that teach agents how to manage their own schedules, tasks, and reminders — enabling self-scheduling agents that can create follow-up jobs, track work items, and set compliance deadlines autonomously.
+
 ## Branch Strategies
 
 | Strategy | Behavior |
@@ -213,3 +262,11 @@ schedules:
 - [gitagent](https://github.com/open-gitagent/gitagent) — Git-native AI agent standard
 - [gitclaw](https://github.com/open-gitagent/gitclaw) — Universal git-native agent runtime
 - **gitcron** — Git-native scheduling and task management
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+MIT

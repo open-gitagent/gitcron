@@ -1,8 +1,46 @@
 {
   "name": "gitcron",
   "version": "0.1.0",
-  "description": "Git-native scheduling, tasks, and reminders — cron.yaml to GitHub Actions",
+  "description": "Cron for AI agents — git-native scheduling, tasks, and reminders compiled to GitHub Actions",
   "type": "module",
+  "license": "MIT",
+  "author": "Khush Patel <khush@lyzr.ai>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-gitagent/gitcron.git"
+  },
+  "homepage": "https://github.com/open-gitagent/gitcron",
+  "bugs": {
+    "url": "https://github.com/open-gitagent/gitcron/issues"
+  },
+  "keywords": [
+    "git",
+    "cron",
+    "github-actions",
+    "scheduling",
+    "automation",
+    "tasks",
+    "reminders",
+    "gitcron",
+    "gitagent",
+    "gitclaw",
+    "ai-agents",
+    "claude-code",
+    "claude-code-sdk",
+    "openclaw",
+    "llm",
+    "agent-scheduling",
+    "cron-for-agents"
+  ],
+  "files": [
+    "dist",
+    "spec",
+    "skills",
+    "tools",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "gitcron": "./dist/index.js"
   },
